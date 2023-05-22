@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 class Login extends Component {
   state = {
     name: '',
     email: '',
     disabled: true,
+    redirect: false,
   };
 
   validateFields = () => {
@@ -22,9 +24,19 @@ class Login extends Component {
     this.setState({ [name]: value }, this.validateFields);
   };
 
-  render() {
-    const { disabled } = this.state;
+  handleOnClickRedirect = async () => {
+    const URL = 'https://opentdb.com/api_token.php?command=request';
+    const response = await fetch(URL);
+    const data = await response.json();
+    const { token } = data;
+    localStorage.setItem('token', token);
+    this.setState({ redirect: true });
+  };
 
+  render() {
+    const { disabled, redirect } = this.state;
+
+    if (redirect) return <Redirect to="/trivia" />;
     return (
       <main>
         <form>
@@ -51,8 +63,10 @@ class Login extends Component {
           </label>
 
           <button
+            type="button"
             data-testid="btn-play"
             disabled={ disabled }
+            onClick={ this.handleOnClickRedirect }
           >
             Play
           </button>
