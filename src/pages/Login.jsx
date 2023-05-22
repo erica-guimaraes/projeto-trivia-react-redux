@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import { requestSaveEmail, requestSaveName } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -26,11 +29,18 @@ class Login extends Component {
   };
 
   handleOnClickRedirectTrivia = async () => {
+    const { name, email } = this.state;
+    const { dispatch } = this.props;
     const URL = 'https://opentdb.com/api_token.php?command=request';
     const response = await fetch(URL);
     const data = await response.json();
     const { token } = data;
+
     localStorage.setItem('token', token);
+
+    dispatch(requestSaveName(name));
+    dispatch(requestSaveEmail(email));
+
     this.setState({ redirectTrivia: true });
   };
 
@@ -88,4 +98,8 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect()(Login);
