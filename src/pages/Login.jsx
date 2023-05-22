@@ -6,7 +6,8 @@ class Login extends Component {
     name: '',
     email: '',
     disabled: true,
-    redirect: false,
+    redirectTrivia: false,
+    redirectSettings: false,
   };
 
   validateFields = () => {
@@ -24,19 +25,22 @@ class Login extends Component {
     this.setState({ [name]: value }, this.validateFields);
   };
 
-  handleOnClickRedirect = async () => {
+  handleOnClickRedirectTrivia = async () => {
     const URL = 'https://opentdb.com/api_token.php?command=request';
     const response = await fetch(URL);
     const data = await response.json();
     const { token } = data;
     localStorage.setItem('token', token);
-    this.setState({ redirect: true });
+    this.setState({ redirectTrivia: true });
   };
 
-  render() {
-    const { disabled, redirect } = this.state;
+  handleOnClickRedirectSettings = () => { this.setState({ redirectSettings: true }); };
 
-    if (redirect) return <Redirect to="/trivia" />;
+  render() {
+    const { disabled, redirectTrivia, redirectSettings } = this.state;
+
+    if (redirectSettings) return <Redirect to="/settings" />;
+    if (redirectTrivia) return <Redirect to="/trivia" />;
     return (
       <main>
         <form>
@@ -66,9 +70,17 @@ class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ disabled }
-            onClick={ this.handleOnClickRedirect }
+            onClick={ this.handleOnClickRedirectTrivia }
           >
             Play
+          </button>
+
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.handleOnClickRedirectSettings }
+          >
+            Configurações
           </button>
         </form>
       </main>
