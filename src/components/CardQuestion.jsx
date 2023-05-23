@@ -11,6 +11,7 @@ class CardQuestion extends Component {
   state = {
     questionCount: 0,
     isDisabled: false,
+    isNextButton: false,
   };
 
   componentDidMount() {
@@ -37,6 +38,8 @@ class CardQuestion extends Component {
   handleOnClickAnswer = (event) => {
     this.handleOnClickChangeColor(event);
     this.handleOnClickScore(event);
+
+    this.setState({ isNextButton: true });
   };
 
   handleOnClickChangeColor = ({ target }) => {
@@ -84,8 +87,19 @@ class CardQuestion extends Component {
     }
   };
 
+  handleOnClickChangeAnswer = () => {
+    const { dispatch } = this.props;
+    this.setState((prevState) => ({
+      questionCount: prevState.questionCount + 1,
+    }));
+
+    const thirty = 30;
+
+    dispatch(requestTime(thirty));
+  };
+
   render() {
-    const { questionCount, isDisabled } = this.state;
+    const { questionCount, isDisabled, isNextButton } = this.state;
     const { results, alternatives, timer } = this.props;
 
     return (
@@ -137,6 +151,20 @@ class CardQuestion extends Component {
                   ))
                 }
               </div>
+
+              {
+                isNextButton && (
+                  <div>
+                    <button
+                      type="button"
+                      data-testid="btn-next"
+                      onClick={ this.handleOnClickChangeAnswer }
+                    >
+                      Next
+                    </button>
+                  </div>
+                )
+              }
             </>
           ) : ''
         }
