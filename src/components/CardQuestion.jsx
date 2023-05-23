@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './CardQuestion.module.css';
-import { requestTime } from '../redux/actions';
+import { requestAddScore, requestTime } from '../redux/actions';
 
 const correctAnswerText = 'correct-answer';
+const dataTestIdText = 'data-testid';
 
 class CardQuestion extends Component {
   state = {
@@ -33,10 +34,15 @@ class CardQuestion extends Component {
     }, firstSecond);
   };
 
+  handleOnClickAnswer = (event) => {
+    this.handleOnClickChangeColor(event);
+    this.handleOnClickScore(event);
+  };
+
   handleOnClickChangeColor = ({ target }) => {
     const buttons = [...target.parentNode.childNodes];
     buttons.forEach((button) => {
-      const attribute = button.getAttribute('data-testid');
+      const attribute = button.getAttribute(dataTestIdText);
       if (attribute === correctAnswerText) {
         button.classList.add(styles.buttonAlternativeTrue);
       }
@@ -44,6 +50,38 @@ class CardQuestion extends Component {
         button.classList.add(styles.buttonAlternativeFalse);
       }
     });
+  };
+
+  handleOnClickScore = ({ target }) => {
+    const attribute = target.getAttribute(dataTestIdText);
+
+    let isRight = false;
+    if (attribute === correctAnswerText) {
+      isRight = true;
+    }
+
+    if (isRight) {
+      const { questionCount } = this.state;
+      const { timer, results, score, dispatch } = this.props;
+      const { difficulty } = results[questionCount];
+
+      const ten = 10;
+      const three = 3;
+
+      switch (difficulty) {
+      case 'easy':
+        dispatch(requestAddScore(ten + (timer * (1))));
+        break;
+      case 'medium':
+        dispatch(requestAddScore(ten + (timer * (2))));
+        break;
+      case 'hard':
+        dispatch(requestAddScore(ten + (timer * (three))));
+        break;
+      default:
+        return score;
+      }
+    }
   };
 
   render() {
@@ -91,7 +129,7 @@ class CardQuestion extends Component {
                             .incorrect_answers.indexOf(answer)}`
                       }
                       onClick={
-                        (event) => this.handleOnClickChangeColor(event)
+                        (event) => this.handleOnClickAnswer(event)
                       }
                     >
                       {answer}
@@ -117,6 +155,7 @@ CardQuestion.propTypes = {
 
 const mapStateToProps = ({ player }) => ({
   timer: player.timer,
+  score: player.score,
 });
 
 export default connect(mapStateToProps)(CardQuestion);
