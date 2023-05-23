@@ -1,9 +1,31 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 class Ranking extends Component {
+  state = {
+    redirectLogin: false,
+  };
+
+  handleOnClickRedirectLogin = () => {
+    this.setState({
+      redirectLogin: true,
+    });
+  };
+
   render() {
+    const { redirectLogin } = this.state;
+    if (redirectLogin) return <Redirect to="/" />;
     return (
-      <div data-testid="ranking-title">Ranking</div>
+      <div>
+        <h1 data-testid="ranking-title">Ranking</h1>
+        <button
+          data-testid="btn-go-home"
+          type="button"
+          onClick={ this.handleOnClickRedirectLogin }
+        >
+          Jogar Novamente
+        </button>
+      </div>
     );
   }
 }
