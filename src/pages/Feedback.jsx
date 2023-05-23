@@ -6,20 +6,28 @@ import Header from '../components/Header';
 
 class Feedback extends Component {
   state = {
-    loading: false,
+    redirectLogin: false,
+    redirectRanking: false,
   };
 
-  handleClick = () => {
+  handleOnClickRedirectLogin = () => {
     this.setState({
-      loading: true,
+      redirectLogin: true,
+    });
+  };
+
+  handleOnClickRedirectRanking = () => {
+    this.setState({
+      redirectRanking: true,
     });
   };
 
   render() {
-    const { loading } = this.state;
+    const { redirectLogin, redirectRanking } = this.state;
     const { assertions, score } = this.props;
     const mNumber = 3;
-    if (loading) return <Redirect to="/" />;
+    if (redirectLogin) return <Redirect to="/" />;
+    if (redirectRanking) return <Redirect to="/ranking" />;
     return (
       <div>
         <Header />
@@ -35,9 +43,16 @@ class Feedback extends Component {
         <button
           data-testid="btn-play-again"
           type="button"
-          onClick={ this.handleClick }
+          onClick={ this.handleOnClickRedirectLogin }
         >
           Play Again
+        </button>
+        <button
+          data-testid="btn-ranking"
+          type="button"
+          onClick={ this.handleOnClickRedirectRanking }
+        >
+          Ranking
         </button>
       </div>
     );
