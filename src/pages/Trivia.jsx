@@ -36,8 +36,8 @@ class Trivia extends Component {
       const incorrectAnswers = obj.incorrect_answers;
       let answers = [...incorrectAnswers];
       answers.push(correctAnswer);
-      const mNunber = 0.5;
-      answers = answers.sort(() => Math.random() - mNunber);
+      const magicNumber = 0.5;
+      answers = answers.sort(() => Math.random() - magicNumber);
       const objAnswers = { answers };
       objAnswers[obj.correct_answer] = true;
       incorrectAnswers.forEach((answer) => { objAnswers[answer] = false; });
