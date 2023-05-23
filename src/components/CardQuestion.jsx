@@ -1,12 +1,36 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styles from './CardQuestion.module.css';
+import { requestTime } from '../redux/actions';
 
 const correctAnswerText = 'correct-answer';
 
 class CardQuestion extends Component {
   state = {
     questionCount: 0,
+    isDisabled: false,
+  };
+
+  componentDidMount() {
+    this.handleTimer();
+  }
+
+  handleTimer = async () => {
+    const firstSecond = 1000;
+    let { timer } = this.props;
+
+    const count = setInterval(async () => {
+      timer -= 1;
+      const { dispatch } = this.props;
+      dispatch(requestTime(timer));
+      if (timer === 0) {
+        clearInterval(count);
+        this.setState({
+          isDisabled: true,
+        });
+      }
+    }, firstSecond);
   };
 
   handleOnClickChangeColor = ({ target }) => {
@@ -23,8 +47,8 @@ class CardQuestion extends Component {
   };
 
   render() {
-    const { questionCount } = this.state;
-    const { results, alternatives } = this.props;
+    const { questionCount, isDisabled } = this.state;
+    const { results, alternatives, timer } = this.props;
 
     return (
       <section>
@@ -45,6 +69,12 @@ class CardQuestion extends Component {
                   </strong>
                 </p>
               </div>
+
+              <div>
+                Timer:
+                { ` ${timer}` }
+              </div>
+
               <div
                 data-testid="answer-options"
                 className={ styles.containerAlternatives }
@@ -54,6 +84,7 @@ class CardQuestion extends Component {
                     <button
                       type="button"
                       key={ answer }
+                      disabled={ isDisabled }
                       data-testid={
                         alternatives[questionCount][answer] ? correctAnswerText
                           : `wrong-answer-${results[questionCount]
@@ -84,4 +115,8 @@ CardQuestion.propTypes = {
   }),
 }.isRequired;
 
-export default CardQuestion;
+const mapStateToProps = ({ player }) => ({
+  timer: player.timer,
+});
+
+export default connect(mapStateToProps)(CardQuestion);

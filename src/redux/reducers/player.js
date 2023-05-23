@@ -1,10 +1,13 @@
-import { REQUEST_SAVE_EMAIL, REQUEST_SAVE_NAME } from '../actions/actionsTypes';
+import {
+  REQUEST_SAVE_EMAIL, REQUEST_SAVE_NAME, REQUEST_TIME,
+} from '../actions/actionsTypes';
 
 const INITIAL_STATE = {
   name: '',
   assertions: 0,
   score: 0,
   gravatarEmail: '',
+  timer: 30,
 };
 
 const player = (state = INITIAL_STATE, action) => {
@@ -18,6 +21,11 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       gravatarEmail: action.payload,
+    };
+  case REQUEST_TIME:
+    return {
+      ...state,
+      timer: action.payload,
     };
   default:
     return state;
