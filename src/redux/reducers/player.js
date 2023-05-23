@@ -1,4 +1,5 @@
 import {
+  REQUEST_ADD_SCORE,
   REQUEST_SAVE_EMAIL, REQUEST_SAVE_NAME, REQUEST_TIME,
 } from '../actions/actionsTypes';
 
@@ -26,6 +27,11 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       timer: action.payload,
+    };
+  case REQUEST_ADD_SCORE:
+    return {
+      ...state,
+      score: action.payload,
     };
   default:
     return state;
