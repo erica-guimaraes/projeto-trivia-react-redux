@@ -33,9 +33,11 @@ class Feedback extends Component {
         <Header />
         {
           assertions < mNumber
-            ? <p data-testid="feedback-text">
-              Could be better...
-            </p>
+            ? (
+              <p data-testid="feedback-text">
+                Could be better...
+              </p>
+            )
             : <p data-testid="feedback-text">Well Done!</p>
         }
         <p data-testid="feedback-total-score">{ score }</p>

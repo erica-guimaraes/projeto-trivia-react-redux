@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import styles from './CardQuestion.module.css';
 import { requestAddScore, requestTime } from '../redux/actions';
 
@@ -12,6 +13,7 @@ class CardQuestion extends Component {
     questionCount: 0,
     isDisabled: false,
     isNextButton: false,
+    isRedirectToFeedback: false,
   };
 
   componentDidMount() {
@@ -20,9 +22,9 @@ class CardQuestion extends Component {
 
   handleTimer = async () => {
     const firstSecond = 1000;
-    let { timer } = this.props;
 
     const count = setInterval(async () => {
+      let { timer } = this.props;
       timer -= 1;
       const { dispatch } = this.props;
       dispatch(requestTime(timer));
@@ -68,18 +70,18 @@ class CardQuestion extends Component {
       const { timer, results, score, dispatch } = this.props;
       const { difficulty } = results[questionCount];
 
-      const ten = 10;
-      const three = 3;
+      const constDifficulty = 10;
+      const hardDifficulty = 3;
 
       switch (difficulty) {
       case 'easy':
-        dispatch(requestAddScore(ten + (timer * (1))));
+        dispatch(requestAddScore(constDifficulty + (timer * (1))));
         break;
       case 'medium':
-        dispatch(requestAddScore(ten + (timer * (2))));
+        dispatch(requestAddScore(constDifficulty + (timer * (2))));
         break;
       case 'hard':
-        dispatch(requestAddScore(ten + (timer * (three))));
+        dispatch(requestAddScore(constDifficulty + (timer * (hardDifficulty))));
         break;
       default:
         return score;
@@ -88,23 +90,29 @@ class CardQuestion extends Component {
   };
 
   handleOnClickChangeAnswer = () => {
-    // const { questionCount } = this.state;
+    const { questionCount } = this.state;
     const { dispatch } = this.props;
-    this.setState((prevState) => ({
-      questionCount: prevState.questionCount + 1,
-    }));
+    const maxCountNumber = 4;
+
+    if (questionCount < maxCountNumber) {
+      this.setState((prevState) => ({
+        questionCount: prevState.questionCount + 1,
+      }));
+    }
 
     const thirty = 30;
-
     dispatch(requestTime(thirty));
 
-    // if (questionCount === 5) {}
+    if (questionCount === maxCountNumber) {
+      this.setState({ isRedirectToFeedback: true });
+    }
   };
 
   render() {
-    const { questionCount, isDisabled, isNextButton } = this.state;
+    const { questionCount, isDisabled, isNextButton, isRedirectToFeedback } = this.state;
     const { results, alternatives, timer } = this.props;
 
+    if (isRedirectToFeedback) return <Redirect to="/feedback" />;
     return (
       <section>
         {

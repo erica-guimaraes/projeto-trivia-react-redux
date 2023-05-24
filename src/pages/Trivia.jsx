@@ -8,6 +8,7 @@ class Trivia extends Component {
     results: [],
     alternatives: [],
     invalidToken: false,
+    isRedirectToFeedback: false,
   };
 
   async componentDidMount() {
@@ -46,15 +47,24 @@ class Trivia extends Component {
     this.setState({ alternatives });
   };
 
-  render() {
-    const { results, alternatives, invalidToken } = this.state;
+  hasRedirectToFeedbackPage = () => {
+    this.setState({ isRedirectToFeedback: true });
+  };
 
+  render() {
+    const { results, alternatives, invalidToken, isRedirectToFeedback } = this.state;
+
+    if (isRedirectToFeedback) return <Redirect to="/feedback" />;
     if (invalidToken) return <Redirect to="/" />;
     return (
       <>
         <Header />
         <main>
-          <CardQuestion results={ results } alternatives={ alternatives } />
+          <CardQuestion
+            results={ results }
+            alternatives={ alternatives }
+            hasRedirectToFeedbackPage={ this.hasRedirectToFeedbackPage }
+          />
         </main>
       </>
     );
