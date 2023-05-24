@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import styles from './CardQuestion.module.css';
-import { requestAddScore, requestTime } from '../redux/actions';
+import { requestAddScoreAndAssertions, requestTime } from '../redux/actions';
 
 const correctAnswerText = 'correct-answer';
 const dataTestIdText = 'data-testid';
@@ -75,13 +75,15 @@ class CardQuestion extends Component {
 
       switch (difficulty) {
       case 'easy':
-        dispatch(requestAddScore(constDifficulty + (timer * (1))));
+        dispatch(requestAddScoreAndAssertions(constDifficulty + (timer * (1))));
         break;
       case 'medium':
-        dispatch(requestAddScore(constDifficulty + (timer * (2))));
+        dispatch(requestAddScoreAndAssertions(constDifficulty + (timer * (2))));
         break;
       case 'hard':
-        dispatch(requestAddScore(constDifficulty + (timer * (hardDifficulty))));
+        dispatch(
+          requestAddScoreAndAssertions(constDifficulty + (timer * (hardDifficulty))),
+        );
         break;
       default:
         return score;

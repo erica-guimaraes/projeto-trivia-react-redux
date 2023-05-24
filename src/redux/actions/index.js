@@ -1,5 +1,5 @@
 import {
-  REQUEST_SAVE_NAME, REQUEST_SAVE_EMAIL, REQUEST_TIME, REQUEST_ADD_SCORE,
+  REQUEST_SAVE_NAME, REQUEST_SAVE_EMAIL, REQUEST_TIME, REQUEST_ADD_SCORE_AND_ASSERTIONS,
 } from './actionsTypes';
 
 export const requestSaveEmail = (email) => ({
@@ -17,7 +17,7 @@ export const requestTime = (timer) => ({
   payload: timer,
 });
 
-export const requestAddScore = (score) => ({
-  type: REQUEST_ADD_SCORE,
+export const requestAddScoreAndAssertions = (score) => ({
+  type: REQUEST_ADD_SCORE_AND_ASSERTIONS,
   payload: score,
 });
