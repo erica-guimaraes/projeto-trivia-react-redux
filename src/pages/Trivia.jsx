@@ -1,7 +1,10 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import CardQuestion from '../components/CardQuestion';
+import { requestResetState } from '../redux/actions';
 
 class Trivia extends Component {
   state = {
@@ -12,6 +15,10 @@ class Trivia extends Component {
   };
 
   async componentDidMount() {
+    const { dispatch } = this.props;
+
+    dispatch(requestResetState());
+
     const data = await this.getResponseTrivia();
     this.setState({ results: data.results });
 
@@ -71,4 +78,8 @@ class Trivia extends Component {
   }
 }
 
-export default Trivia;
+Trivia.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+}.isRequired;
+
+export default connect()(Trivia);

@@ -24,14 +24,14 @@ class CardRanking extends Component {
                 </div>
                 <div>
                   <strong
-                    data-testid={ `player-name-${player.numberOfPlayer}` }
+                    data-testid={ `player-name-${index}` }
                   >
                     { player.name }
                   </strong>
                 </div>
                 <div>
                   <strong
-                    data-testid={ `player-score-${player.numberOfPlayer}` }
+                    data-testid={ `player-score-${index}` }
                   >
                     { player.score }
                   </strong>

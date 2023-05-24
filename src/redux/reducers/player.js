@@ -44,8 +44,9 @@ const player = (state = INITIAL_STATE, action) => {
     };
   case REQUEST_RESET_STATE:
     return {
-      ...INITIAL_STATE,
-      numberOfPlayer: state.numberOfPlayer,
+      ...state,
+      score: 0,
+      assertions: 0,
     };
   default:
     return state;

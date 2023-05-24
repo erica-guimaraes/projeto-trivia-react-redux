@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import md5 from 'crypto-js/md5';
 import styles from './CardQuestion.module.css';
 import {
-  requestAddScoreAndAssertions, requestIncrementOfIndexPlayer, requestTime,
+  requestAddScoreAndAssertions, requestTime,
 } from '../redux/actions';
 
 const correctAnswerText = 'correct-answer';
@@ -67,7 +67,7 @@ class CardQuestion extends Component {
     if (attribute === correctAnswerText) {
       isRight = true;
     }
-
+    console.log(isRight);
     if (isRight) {
       const { questionCount } = this.state;
       const { timer, results, score, dispatch } = this.props;
@@ -95,7 +95,6 @@ class CardQuestion extends Component {
   };
 
   addPlayerToRanking = (gravatarEmail, name, score) => {
-    const { dispatch, numberOfPlayer } = this.props;
     const md5EmailHash = md5(gravatarEmail).toString();
     const picture = `https://www.gravatar.com/avatar/${md5EmailHash}`;
 
@@ -103,10 +102,7 @@ class CardQuestion extends Component {
       name,
       score,
       picture,
-      numberOfPlayer,
     };
-
-    dispatch(requestIncrementOfIndexPlayer());
 
     if (!localStorage.getItem('ranking')) {
       localStorage.setItem('ranking', JSON.stringify([]));
