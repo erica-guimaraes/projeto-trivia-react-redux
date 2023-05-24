@@ -88,6 +88,7 @@ class CardQuestion extends Component {
   };
 
   handleOnClickChangeAnswer = () => {
+    // const { questionCount } = this.state;
     const { dispatch } = this.props;
     this.setState((prevState) => ({
       questionCount: prevState.questionCount + 1,
@@ -96,6 +97,8 @@ class CardQuestion extends Component {
     const thirty = 30;
 
     dispatch(requestTime(thirty));
+
+    // if (questionCount === 5) {}
   };
 
   render() {
