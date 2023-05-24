@@ -2,8 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import md5 from 'crypto-js/md5';
 import styles from './CardQuestion.module.css';
-import { requestAddScoreAndAssertions, requestTime } from '../redux/actions';
+import {
+  requestAddScoreAndAssertions, requestIncrementOfIndexPlayer, requestTime,
+} from '../redux/actions';
 
 const correctAnswerText = 'correct-answer';
 const dataTestIdText = 'data-testid';
@@ -91,9 +94,34 @@ class CardQuestion extends Component {
     }
   };
 
+  addPlayerToRanking = (gravatarEmail, name, score) => {
+    const { dispatch, numberOfPlayer } = this.props;
+    const md5EmailHash = md5(gravatarEmail).toString();
+    const picture = `https://www.gravatar.com/avatar/${md5EmailHash}`;
+
+    const player = {
+      name,
+      score,
+      picture,
+      numberOfPlayer,
+    };
+
+    dispatch(requestIncrementOfIndexPlayer());
+
+    if (!localStorage.getItem('ranking')) {
+      localStorage.setItem('ranking', JSON.stringify([]));
+    }
+    if (localStorage.getItem('ranking')) {
+      const rankingList = JSON.parse(localStorage.getItem('ranking'));
+      rankingList.push(player);
+      rankingList.sort((a, b) => b.score - a.score);
+      localStorage.setItem('ranking', JSON.stringify(rankingList));
+    }
+  };
+
   handleOnClickChangeAnswer = () => {
     const { questionCount } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, gravatarEmail, name, score } = this.props;
     const maxCountNumber = 4;
 
     if (questionCount < maxCountNumber) {
@@ -106,6 +134,7 @@ class CardQuestion extends Component {
     dispatch(requestTime(thirty));
 
     if (questionCount === maxCountNumber) {
+      this.addPlayerToRanking(gravatarEmail, name, score);
       this.setState({ isRedirectToFeedback: true });
     }
   };
@@ -197,6 +226,9 @@ CardQuestion.propTypes = {
 const mapStateToProps = ({ player }) => ({
   timer: player.timer,
   score: player.score,
+  name: player.name,
+  gravatarEmail: player.gravatarEmail,
+  numberOfPlayer: player.numberOfPlayer,
 });
 
 export default connect(mapStateToProps)(CardQuestion);

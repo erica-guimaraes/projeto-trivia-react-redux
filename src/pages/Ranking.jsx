@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import CardRanking from '../components/CardRanking';
 
 class Ranking extends Component {
   state = {
@@ -14,6 +15,7 @@ class Ranking extends Component {
 
   render() {
     const { redirectLogin } = this.state;
+
     if (redirectLogin) return <Redirect to="/" />;
     return (
       <div>
@@ -25,6 +27,10 @@ class Ranking extends Component {
         >
           Jogar Novamente
         </button>
+
+        <section>
+          <CardRanking />
+        </section>
       </div>
     );
   }

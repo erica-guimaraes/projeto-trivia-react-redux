@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import Header from '../components/Header';
+import { requestResetState } from '../redux/actions';
 
 class Feedback extends Component {
   state = {
@@ -10,7 +11,11 @@ class Feedback extends Component {
     redirectRanking: false,
   };
 
-  handleOnClickRedirectLogin = () => {
+  handleOnClickPlayAgain = () => {
+    const { dispatch } = this.props;
+
+    dispatch(requestResetState());
+
     this.setState({
       redirectLogin: true,
     });
@@ -45,7 +50,7 @@ class Feedback extends Component {
         <button
           data-testid="btn-play-again"
           type="button"
-          onClick={ this.handleOnClickRedirectLogin }
+          onClick={ this.handleOnClickPlayAgain }
         >
           Play Again
         </button>

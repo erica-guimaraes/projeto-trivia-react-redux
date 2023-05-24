@@ -1,5 +1,7 @@
 import {
   REQUEST_ADD_SCORE_AND_ASSERTIONS,
+  REQUEST_INCREMENT_OF_INDEX_PLAYER,
+  REQUEST_RESET_STATE,
   REQUEST_SAVE_EMAIL, REQUEST_SAVE_NAME, REQUEST_TIME,
 } from '../actions/actionsTypes';
 
@@ -9,6 +11,7 @@ const INITIAL_STATE = {
   score: 0,
   gravatarEmail: '',
   timer: 30,
+  numberOfPlayer: 0,
 };
 
 const player = (state = INITIAL_STATE, action) => {
@@ -33,6 +36,16 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       score: state.score + action.payload,
       assertions: state.assertions + 1,
+    };
+  case REQUEST_INCREMENT_OF_INDEX_PLAYER:
+    return {
+      ...state,
+      numberOfPlayer: state.numberOfPlayer + 1,
+    };
+  case REQUEST_RESET_STATE:
+    return {
+      ...INITIAL_STATE,
+      numberOfPlayer: state.numberOfPlayer,
     };
   default:
     return state;
